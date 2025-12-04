@@ -1,18 +1,24 @@
-# Ejercicio 3: estadísticas de un archivo GFF
-# El objetivo de este programa es contar el número de features por tipo en un archivo GFF, contar el average lenght
-# y la distribución por strand
-# Para contar el número de features
-# Podemos usar un diccionario donde las keys son los tipos de features y los values son los contadores
-# Podemos eliminar los comentarios con el método startswith('#')
-# Podemos usar el método split('\t') para separar las columnas
-# Para contar el average length
-# Podemos restar la columna 5 (end) menos la columna 4 (start) para obtener la longitud de cada feature
-# Sumamos todas las longitudes y dividimos por el número total de features
-# Para contar la distribución por strand
-# Podemos usar otro diccionario donde las keys son los strands ('+', '-') y los values son los contadores
-# Haga el archivo para enviarlo json
-# Añadir documentación al código
-# Añadir la función para que el usuario pueda escoger el tipo de feature (si así lo requiere) para analizar
+"""
+gff.stats
+--------------
+Herramienta simple para calcular estadísticas de un archivo GFF.
+
+Características:
+- Cuenta el número de features por tipo (columna 3).
+- Calcula la distribución por strand (columna 7).
+- Calcula la longitud media de los features (end - start + 1).
+- Permite filtrar por un tipo de feature concreto mediante el argumento `--feature_type`.
+
+Salida:
+Devuelve un JSON con las claves `feature_counts`, `strand_distribution` y `average_length`.
+
+Ejemplo de uso (desde la línea de comandos):
+    python gff.stats.py anotaciones.gff --feature_type gene
+
+Notas:
+- El programa ignora líneas que empiezan por `#` y líneas mal formateadas con menos de 9 columnas.
+- Está pensado como una utilidad pequeña para análisis exploratorio; no valida exhaustivamente el formato GFF.
+"""
 import json
 from collections import defaultdict
 import sys
@@ -64,6 +70,20 @@ def gff_stats(gff_file, feature_type=None):
 
     return stats
 def main():
+    """
+    Punto de entrada para la línea de comandos.
+
+    Analiza los argumentos provistos por el usuario, ejecuta el cálculo de estadísticas
+    sobre el archivo GFF especificado y escribe el resultado en formato JSON en
+    la salida estándar.
+
+    Argumentos de línea de comandos:
+    - `gff_file`: ruta al archivo GFF a procesar.
+    - `--feature_type`: (opcional) filtrar por un tipo de feature concreto.
+
+    Ejemplo:
+        python gff.stats.py anotaciones.gff --feature_type gene
+    """
     parser = argparse.ArgumentParser(description='Calcular estadísticas de un archivo GFF.')
     parser.add_argument('gff_file', help='Ruta al archivo GFF.')
     parser.add_argument('--feature_type', help='Tipo de feature a analizar (opcional).', default=None)
@@ -71,4 +91,7 @@ def main():
 
     stats = gff_stats(args.gff_file, args.feature_type)
     print(json.dumps(stats, indent=4))
+
+if __name__ == '__main__':
+    main()
 

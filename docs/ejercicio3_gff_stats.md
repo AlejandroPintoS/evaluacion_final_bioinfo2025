@@ -13,7 +13,7 @@ python gff_stats.py --gff genes.gff --out report.json
 
 Procesar el GFF y generar un JSON con:
 - Número total de líneas no comentadas.
-- Conteo por tipo de feature.
+- Conteo por tipo de feature
 - Longitud promedio por tipo.
 - Distribución de strand (+ y -).
 
@@ -60,3 +60,4 @@ Solo calcula estadísticas para las líneas cuyo `type == CDS`.
 - Uso de argparse.
 - Diccionarios, comprensión de listas, manejo básico de archivos.
 - Pruebas con asserts + documento de pruebas, bien con pytest.
+
